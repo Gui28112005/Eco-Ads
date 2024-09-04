@@ -89,6 +89,21 @@ app.get('/ads/results', async (req, res) => {
     }
 });
 
+// Rota para atualizar a contagem de cliques em um anúncio
+app.post('/ads/:id/click', async (req, res) => {
+    const { id } = req.params;
+    const query = 'UPDATE anuncios SET cliques = cliques + 1 WHERE id = $1';
+    try {
+        await pool.query(query, [id]);
+        res.send('Contagem de cliques atualizada');
+    } catch (err) {
+        console.error('Erro ao atualizar cliques:', err);
+        res.status(500).send('Erro ao atualizar cliques');
+    }
+});
+
+
+
 // Iniciar o servidor
 app.listen(port, () => {
     console.log(`Servidor rodando em http://localhost:${port}`);
